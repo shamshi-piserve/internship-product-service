@@ -219,7 +219,10 @@ internship-product-service/
 ├── tests/                # Unit tests
 │   ├── __init__.py       # Makes the tests folder a Python module
 │   └── test_main.py      # Tests for API endpoints
+    |__ test_import.py
 └── venv/                 # Virtual environment (not tracked in Git)
+|__ pytest.ini
+
 ```
 
 ---
