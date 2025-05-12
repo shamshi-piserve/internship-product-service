@@ -232,7 +232,10 @@ internship-product-service/
 ---
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0b9776 (Add initial project setup: FastAPI structure, CRUD APIs, filtering, OpenAPI docs, and unit tests)
 *Built by Vimal for the internship assignment at Piserve.*
 
 *Built by Vimal for the internship assignment at Piserve.*
