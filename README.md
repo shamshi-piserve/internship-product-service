@@ -1,4 +1,3 @@
-
 # Product Service
 
 A FastAPI-based microservice for managing products, developed as part of the internship assignment. This service provides REST APIs for creating, reading, updating, and deleting products, with filtering capabilities, input validation, error handling, interactive documentation, and comprehensive unit tests.
@@ -21,7 +20,7 @@ A FastAPI-based microservice for managing products, developed as part of the int
 ## Project Overview
 The Product Service is a microservice that manages product data (e.g., name, category, price) stored in a PostgreSQL database. It exposes REST APIs for CRUD operations (Create, Read, Update, Delete) and supports filtering products by name or category. Built with **FastAPI**, it includes input validation via **Pydantic**, database integration with **SQLAlchemy**, and auto-generated OpenAPI documentation. Unit tests ensure reliability using **Pytest**.
 
-This project fulfills the internship assignment requirements, providing a robust foundation for a product management system.
+This project fulfills the internship assignment requirements, providing a robust foundation for a product management system, now structured using the MVC architecture for better maintainability.
 
 ---
 
@@ -33,6 +32,7 @@ This project fulfills the internship assignment requirements, providing a robust
 - **OpenAPI Documentation**: Interactive API explorer at `http://localhost:8000/docs`.
 - **Unit Tests**: Comprehensive test suite for all API endpoints.
 - **Database Persistence**: Stores data in PostgreSQL for reliability.
+- **MVC Architecture**: Separates concerns into Model (data logic), View (API responses), and Controller (API routes).
 
 ---
 
@@ -87,19 +87,21 @@ Ensure you have the following installed:
 4. **Set Up PostgreSQL**:
    - Install and start PostgreSQL.
    - Open **pgAdmin 4** (installed with PostgreSQL).
-   - Connect to the default server (username: `postgres`, password: set during installation).
+   - Connect to the default server (username: `postgres`, password: `mypassword`).
    - Create a database named `products_db`:
      - Right-click **Databases** > **Create > Database**.
      - Enter `products_db` and click **Save**.
-   - Note your PostgreSQL password.
+   - Verify the `products` table exists:
+     - Expand `products_db` > **Schemas** > **public** > **Tables**.
+     - You should see a table named `products` with columns: `id`, `name`, `category`, `price`.
 
 5. **Configure Database URL**:
-   - Open `main.py` in a code editor (e.g., VS Code).
-   - Update the `DATABASE_URL` with your PostgreSQL credentials:
+   - Open `database.py` in a code editor (e.g., VS Code).
+   - Verify the `DATABASE_URL` matches your PostgreSQL credentials:
      ```python
-     DATABASE_URL = "postgresql://postgres:your_password@localhost:5432/products_db"
+     DATABASE_URL = "postgresql://postgres:mypassword@localhost:5432/products_db"
      ```
-     Replace `your_password` with your actual PostgreSQL password.
+     If your password is different, update it here.
 
 ---
 
@@ -138,7 +140,6 @@ The Product Service provides the following REST APIs for managing products:
   curl -X POST "http://localhost:8000/products/" -H "Content-Type: application/json" -d '{"name": "Doll", "category": "Toy", "price": 10.99}'
   ```
   Response:
-_CLOSE_XAI_BLOCK_
   ```json
   {"id": 1, "name": "Doll", "category": "Toy", "price": 10.99}
   ```
@@ -194,46 +195,53 @@ The project includes unit tests to verify API functionality.
    pytest
    ```
    - This executes tests in the `tests` folder.
-   - Expect 6 tests to pass, covering CRUD operations, filtering, and error handling.
+   - Expect 7 tests to pass: 6 from `test_main.py` (covering CRUD operations, filtering, and error handling) and 1 from `test_import.py`.
 
 ### Test Details
-- **Location**: `tests/test_main.py`
+- **Location**: `tests/test_main.py` and `tests/test_import.py`
 - **Database**: Uses an in-memory SQLite database to avoid modifying the PostgreSQL database.
 - **Coverage**:
-  - Creating a product and verifying its attributes.
-  - Listing all products.
-  - Filtering products by category.
-  - Handling invalid product IDs (404 errors).
-  - Updating a product’s details.
-  - Deleting a product.
+  - `test_import.py`: Verifies the `Product` model can be imported.
+  - `test_main.py`:
+    - Creating a product and verifying its attributes.
+    - Listing all products.
+    - Filtering products by category.
+    - Handling invalid product IDs (404 errors).
+    - Updating a product’s details.
+    - Deleting a product.
 
 ---
 
 ## Project Structure
-The project is organized as follows:
+The project follows an MVC architecture for better organization and maintainability:
 
 ```plaintext
 internship-product-service/
-├── main.py               # FastAPI application with API routes and database logic
-├── README.md             # Project documentation (this file)
-├── tests/                # Unit tests
-│   ├── __init__.py       # Makes the tests folder a Python module
-│   └── test_main.py      # Tests for API endpoints
-    |__ test_import.py
-└── venv/                 # Virtual environment (not tracked in Git)
-|__ pytest.ini
-
+├── models/              # Model: Database models
+│   ├── __init__.py
+│   └── product.py      # SQLAlchemy model for Product
+├── schemas/            # Model: Pydantic schemas for validation
+│   ├── __init__.py
+│   └── product.py      # Pydantic schemas for Product
+├── services/           # Business logic layer
+│   ├── __init__.py
+│   └── product.py      # Business logic for product operations
+├── routes/             # Controller: API routes
+│   ├── __init__.py
+│   └── product.py      # FastAPI routes for /products/
+├── tests/              # Unit tests
+│   ├── __init__.py
+│   ├── test_main.py    # Tests for API endpoints
+│   └── test_import.py  # Import test
+├── database.py         # Database setup and session management
+├── dependencies.py     # Dependency injection for database sessions
+├── main.py             # FastAPI app entry point
+├── README.md           # Project documentation (this file)
+├── pytest.ini          # Pytest configuration
+├── .gitignore          # Git ignore file
+└── venv/               # Virtual environment (not tracked in Git)
 ```
 
----
-
-
-
----
-
 
 
 *Built by Vimal for the internship assignment at Piserve.*
-
-*Built by Vimal for the internship assignment at Piserve.*
-
