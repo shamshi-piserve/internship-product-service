@@ -214,7 +214,7 @@ The project includes unit tests to verify API functionality.
 
 ## Project Structure
 The project follows an MVC architecture for better organization and maintainability:
-
+(please create a empty __init__.py file inside the test folder . )
 ```plaintext
 internship-product-service/
 ├── models/              # Model: Database models
