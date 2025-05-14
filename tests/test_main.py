@@ -1,16 +1,11 @@
-import sys
-import os
-# Add the parent directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-import sys
-print("Python path:", sys.path)
-
 import pytest
 from fastapi.testclient import TestClient
-from main import app, ProductDB, get_db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
+from main import app  # Absolute import
+from models.product import Base  # Absolute import
+from dependencies import get_db  # Absolute import
 
 # Test database setup
 DATABASE_URL = "sqlite:///:memory:"
@@ -28,9 +23,16 @@ def override_get_db():
 app.dependency_overrides[get_db] = override_get_db
 
 # Create tables
-ProductDB.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 client = TestClient(app)
+
+# Fixture to clean up database between tests
+@pytest.fixture(autouse=True)
+def setup_database():
+    Base.metadata.create_all(bind=engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
 
 # Test functions
 def test_create_product():
