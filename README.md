@@ -242,11 +242,6 @@ internship-product-service/
 └── venv/               # Virtual environment (not tracked in Git)
 ```
 
----
 
-## Contributing
-Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request for review.
-
----
 
 *Built by Vimal for the internship assignment at Piserve.*
